@@ -1,5 +1,6 @@
 package hexlet.code.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Date;
 
 import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.TemporalType.TIMESTAMP;
+
 
 @Entity
 @Getter
