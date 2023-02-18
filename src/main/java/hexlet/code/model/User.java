@@ -1,6 +1,7 @@
 package hexlet.code.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 import static javax.persistence.GenerationType.AUTO;
@@ -31,12 +35,23 @@ public class User {
     @GeneratedValue(strategy = AUTO)
     private Long id;
 
+    @NotBlank
+    @Size(min = 1)
+    private String firstName;
+
+    @NotBlank
+    @Size(min = 1)
+    private String lastName;
+
+    @Email
+    @NotBlank
     @Column(unique = true)
     private String email;
 
-    private String firstName;
-
-    private String lastName;
+    @NotBlank
+    @JsonIgnore
+    @Size(min = 3, max = 100)
+    private String password;
 
     @CreationTimestamp
     @Temporal(TIMESTAMP)
