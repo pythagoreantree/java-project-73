@@ -3,6 +3,7 @@ package hexlet.code.services;
 import hexlet.code.dtos.UserDto;
 import hexlet.code.model.User;
 import hexlet.code.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll() {
@@ -28,7 +32,7 @@ public class UserService {
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userRepository.save(user);
     }
 
@@ -37,12 +41,12 @@ public class UserService {
     }
 
     public void updateUser(long id, UserDto userDto) {
-        final User userToUpdate = userRepository.findById(id).get();
-        userToUpdate.setEmail(userDto.getEmail());
-        userToUpdate.setFirstName(userDto.getFirstName());
-        userToUpdate.setLastName(userDto.getLastName());
-        userToUpdate.setPassword(userDto.getPassword());
-        userRepository.save(userToUpdate);
+        final User user = userRepository.findById(id).get();
+        user.setEmail(userDto.getEmail());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userRepository.save(user);
     }
 
     public void deleteUserById(long id) {
