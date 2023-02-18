@@ -64,11 +64,6 @@ dependencies {
 	)
 }
 
-wrapper {
-	gradleVersion = '7.3'
-	distributionType = Wrapper.DistributionType.ALL
-}
-
 compileJava {
 	options.release = 17
 	options.encoding = 'UTF-8'

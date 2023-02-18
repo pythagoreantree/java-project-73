@@ -15,6 +15,8 @@ spring:
 
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: create-drop
   # Настраиваем консоль Н2
   # Это позволит нам открыть её в браузере по указанному пути
   h2:
