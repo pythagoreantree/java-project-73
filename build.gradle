@@ -3,7 +3,7 @@ plugins {
 	id 'checkstyle'
 	id 'org.springframework.boot' version '2.5.6'
 	id 'io.spring.dependency-management' version '1.1.0'
-	id 'org.liquibase.gradle' version '2.0.4'
+	id 'org.liquibase.gradle' version '2.1.1'
 }
 
 group = 'hexlet.code'
@@ -25,13 +25,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.6'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 
 	implementation 'org.liquibase:liquibase-core:4.15.0'
 	liquibaseRuntime(
 			sourceSets.main.output,
-			'org.liquibase:liquibase-core:4.15.0',
+			'org.liquibase:liquibase-core:4.16.1',
+			'org.liquibase:liquibase-groovy-dsl:3.0.0',
+			'info.picocli:picocli:4.6.1',
+			'javax.xml.bind:jaxb-api:2.3.1',
+			'ch.qos.logback:logback-core:1.2.3',
+			'ch.qos.logback:logback-classic:1.2.3',
 			'org.liquibase.ext:liquibase-hibernate5:4.15.0',
 			'org.springframework.boot:spring-boot-starter-data-jpa'
 	)
@@ -57,7 +62,7 @@ liquibase {
 	activities {
 		main {
 			changeLogFile 'src/main/resources/db/changelog/changelog-master.xml'
-			url 'jdbc:h2:mem:taskManager'
+			url 'jdbc:h2:file:./testdb'
 			username ''
 			password ''
 			// Сравниваем с моделями, задавая пакет

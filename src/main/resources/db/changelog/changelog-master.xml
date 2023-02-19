@@ -1,22 +1,29 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet author="mteplinskaya (generated)" id="1676735867764-1">
+    <changeSet author="mteplinskaya (generated)" id="1676835616464-1">
         <createSequence incrementBy="1" sequenceName="hibernate_sequence" startValue="1"/>
     </changeSet>
-    <changeSet author="mteplinskaya (generated)" id="1676735867764-2">
+    <changeSet author="mteplinskaya (generated)" id="1676835616464-2">
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="usersPK"/>
             </column>
             <column name="created_at" type="TIMESTAMP"/>
+            <column name="desription" type="VARCHAR(255)"/>
+            <column name="desription2" type="VARCHAR(255)"/>
             <column name="email" type="VARCHAR(255)"/>
             <column name="first_name" type="VARCHAR(255)"/>
             <column name="last_name" type="VARCHAR(255)"/>
             <column name="password" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="mteplinskaya (generated)" id="1676735867764-3">
+    <changeSet author="mteplinskaya (generated)" id="1676835616464-3">
         <addUniqueConstraint columnNames="email" constraintName="UC_USERSEMAIL_COL" tableName="users"/>
+    </changeSet>
+    <changeSet author="mteplinskaya (generated)" id="1676835665199-2">
+        <addColumn tableName="users">
+            <column name="desription3" type="varchar(255)"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>
