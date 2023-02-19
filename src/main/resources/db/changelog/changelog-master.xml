@@ -10,8 +10,6 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="usersPK"/>
             </column>
             <column name="created_at" type="TIMESTAMP"/>
-            <column name="desription" type="VARCHAR(255)"/>
-            <column name="desription2" type="VARCHAR(255)"/>
             <column name="email" type="VARCHAR(255)"/>
             <column name="first_name" type="VARCHAR(255)"/>
             <column name="last_name" type="VARCHAR(255)"/>
@@ -20,10 +18,5 @@
     </changeSet>
     <changeSet author="mteplinskaya (generated)" id="1676835616464-3">
         <addUniqueConstraint columnNames="email" constraintName="UC_USERSEMAIL_COL" tableName="users"/>
-    </changeSet>
-    <changeSet author="mteplinskaya (generated)" id="1676835665199-2">
-        <addColumn tableName="users">
-            <column name="desription3" type="varchar(255)"/>
-        </addColumn>
     </changeSet>
 </databaseChangeLog>
