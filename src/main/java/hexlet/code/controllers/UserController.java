@@ -2,7 +2,7 @@ package hexlet.code.controllers;
 
 import hexlet.code.dtos.UserDto;
 import hexlet.code.model.User;
-import hexlet.code.services.UserService;
+import hexlet.code.services.UserServiceImpl;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +19,9 @@ import java.util.List;
 @RequestMapping("/")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

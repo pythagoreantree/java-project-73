@@ -3,6 +3,10 @@ server:
 
 base-url: /api
 
+jwt:
+  token:
+    secret: "secret"
+
 spring:
   application:
     name: taskManager
