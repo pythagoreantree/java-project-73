@@ -3,7 +3,7 @@ package hexlet.code.services;
 import hexlet.code.dtos.UserDto;
 import hexlet.code.model.Role;
 import hexlet.code.model.User;
-import hexlet.code.model.UserDetailsImpl;
+import hexlet.code.dtos.UserDetailsImpl;
 import hexlet.code.repositories.RoleRepository;
 import hexlet.code.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,7 @@
-package hexlet.code.model;
+package hexlet.code.dtos;
 
+import hexlet.code.model.Role;
+import hexlet.code.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

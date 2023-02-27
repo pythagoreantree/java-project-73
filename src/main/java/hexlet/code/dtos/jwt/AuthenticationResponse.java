@@ -1,4 +1,4 @@
-package hexlet.code.model.jwt;
+package hexlet.code.dtos.jwt;
 
 public class AuthenticationResponse {
 
