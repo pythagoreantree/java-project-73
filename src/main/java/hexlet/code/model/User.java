@@ -45,7 +45,7 @@ public class User {
     private String email;
 
     @NotBlank
-//    @JsonIgnore
+    @JsonIgnore
     @Size(min = 3, max = 100)
     private String password;
 
@@ -53,7 +53,9 @@ public class User {
     @Temporal(TIMESTAMP)
     private Date createdAt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    private boolean active = true;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
     joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
     inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})

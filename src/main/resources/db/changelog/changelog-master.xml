@@ -44,4 +44,16 @@
     <changeSet author="mteplinskaya (generated)" id="1677447320611-5">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles" constraintName="FKhfh9dx7w3ubf1co1vdev94g3f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
+    <changeSet author="mteplinskaya (generated)" id="1677510948995-2">
+        <addColumn tableName="users">
+            <column name="active" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="mteplinskaya" id="1677511550124-3">
+        <update tableName="users">
+            <column name="active" value="true" />
+        </update>
+    </changeSet>
 </databaseChangeLog>
