@@ -24,7 +24,7 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(User user) {
         this.username = user.getEmail();
         this.password = user.getPassword();
-        this.authorities = mapRolesToAutorities(user.getRoles());
+        this.authorities = mapRolesToAutorities(new ArrayList<>(user.getRoles()));
         this.active = user.isActive();
     }
 
