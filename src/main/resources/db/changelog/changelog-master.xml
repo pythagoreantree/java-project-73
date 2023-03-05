@@ -5,6 +5,7 @@
     <changeSet author="mteplinskaya (generated)" id="1676838943530-1">
         <createSequence incrementBy="1" sequenceName="hibernate_sequence" startValue="1"/>
     </changeSet>
+
     <changeSet author="mteplinskaya (generated)" id="1676838943530-2">
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -17,9 +18,11 @@
             <column name="password" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
+
     <changeSet author="mteplinskaya (generated)" id="1676838943530-3">
         <addUniqueConstraint columnNames="email" constraintName="UC_USERSEMAIL_COL" tableName="users"/>
     </changeSet>
+
     <changeSet author="mteplinskaya (generated)" id="1677447320611-2">
         <createTable tableName="roles">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -28,6 +31,7 @@
             <column name="name" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
+
     <changeSet author="mteplinskaya (generated)" id="1677447320611-3">
         <createTable tableName="user_roles">
             <column name="user_id" type="BIGINT">
@@ -38,12 +42,15 @@
             </column>
         </createTable>
     </changeSet>
+
     <changeSet author="mteplinskaya (generated)" id="1677447320611-4">
         <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_roles" constraintName="FKh8ciramu9cc9q3qcqiv4ue8a6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="roles" validate="true"/>
     </changeSet>
+
     <changeSet author="mteplinskaya (generated)" id="1677447320611-5">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles" constraintName="FKhfh9dx7w3ubf1co1vdev94g3f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
+
     <changeSet author="mteplinskaya (generated)" id="1677510948995-2">
         <addColumn tableName="users">
             <column name="active" type="boolean">
@@ -51,9 +58,21 @@
             </column>
         </addColumn>
     </changeSet>
+
     <changeSet author="mteplinskaya" id="1677511550124-3">
         <update tableName="users">
             <column name="active" value="true" />
         </update>
+    </changeSet>
+
+    <changeSet author="mteplinskaya" id="1677447320611-3">
+        <insert tableName="roles">
+            <column name="id" value="1"/>
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="2"/>
+            <column name="name" value="ROLE_USER"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

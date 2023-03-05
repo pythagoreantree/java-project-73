@@ -1075,3 +1075,58 @@ ALTER TABLE PUBLIC.users ALTER COLUMN active SET NOT NULL [90081-200]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1332)
 	at hexlet.code.AppApplication.main(AppApplication.java:10)
+2023-03-05 22:18:22 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO USER_ROLES (1[*], 99)"; expected "identifier"; SQL statement:
+insert into USER_ROLES (1, 99) [42001-200]
+2023-03-05 22:19:20 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM USER_ROLES 
+SELECT[*] * FROM USERS
+
+INSERT INTO USER_ROLES (5, 1, 99)"; SQL statement:
+SELECT * FROM USER_ROLES 
+SELECT * FROM USERS
+
+insert into USER_ROLES (5, 1, 99) [42000-200]
+2023-03-05 22:19:25 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO USER_ROLES (5[*], 1, 99)"; expected "identifier"; SQL statement:
+insert into USER_ROLES (5, 1, 99) [42001-200]
+2023-03-05 22:22:55 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO USER_ROLES (38[*], 1, 99)"; expected "identifier"; SQL statement:
+insert into USER_ROLES (38, 1, 99) [42001-200]
+2023-03-05 22:23:02 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO USER_ROLES (39[*], 1, 99)"; expected "identifier"; SQL statement:
+insert into USER_ROLES (39, 1, 99) [42001-200]
+2023-03-05 22:23:04 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO USER_ROLES (39[*], 1, 99)"; expected "identifier"; SQL statement:
+insert into USER_ROLES (39, 1, 99) [42001-200]
+2023-03-05 22:23:18 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM USER_ROLES 
+SELECT[*] * FROM USERS
+
+INSERT INTO USER_ROLES (140, 1, 99)"; SQL statement:
+SELECT * FROM USER_ROLES 
+SELECT * FROM USERS
+
+insert into USER_ROLES (140, 1, 99) [42000-200]
+2023-03-05 22:23:32 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO USER_ROLES (140[*], 1, 99)"; expected "identifier"; SQL statement:
+insert into USER_ROLES (140, 1, 99) [42001-200]
+2023-03-05 22:24:53 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO USER_ROLES (99[*], 1)"; expected "identifier"; SQL statement:
+insert into USER_ROLES (99, 1) [42001-200]
+2023-03-05 22:26:48 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM USER_ROLES 
+SELECT[*] * FROM USERS
+
+INSERT INTO USER_ROLES (2, 99)"; SQL statement:
+SELECT * FROM USER_ROLES 
+SELECT * FROM USERS
+
+insert into USER_ROLES (2, 99) [42000-200]
+2023-03-06 02:44:49 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM USER_ROLES 
+
+INSERT INTO[*] USER_ROLES (USER_ID, ROLE_ID) VALUES (1, 2)"; SQL statement:
+SELECT * FROM USER_ROLES 
+
+insert into user_roles (user_id, role_id) values (1, 2) [42000-200]

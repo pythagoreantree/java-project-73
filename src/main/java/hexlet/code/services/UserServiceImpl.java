@@ -20,7 +20,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserDetailsService {
 
-    private static final String ROLE_USER = "ROLE_USER";
+    private static final String ROLE_USER = "USER";
     @Autowired
     private UserRepository userRepository;
 
