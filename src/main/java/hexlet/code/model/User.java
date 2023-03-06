@@ -44,17 +44,20 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     @NotBlank
-//    @JsonIgnore
     @Size(min = 3, max = 100)
     private String password;
 
+    @JsonIgnore
     @CreationTimestamp
     @Temporal(TIMESTAMP)
     private Date createdAt;
 
+    @JsonIgnore
     private boolean active = true;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
     joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
