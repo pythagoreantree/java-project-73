@@ -5,7 +5,7 @@ base-url: /api
 
 jwt:
   token:
-    secret: "secret"
+    secret: "38782F413F4428472B4B6250655368566D597133743676397924422645294840"
 
 spring:
   application:
