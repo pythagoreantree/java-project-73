@@ -1130,3 +1130,6 @@ INSERT INTO[*] USER_ROLES (USER_ID, ROLE_ID) VALUES (1, 2)"; SQL statement:
 SELECT * FROM USER_ROLES 
 
 insert into user_roles (user_id, role_id) values (1, 2) [42000-200]
+2023-03-06 03:20:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "USER_ROLES[*] SELECT * FROM USERS"; expected "UPDATE, USE"; SQL statement:
+USER_ROLES SELECT * FROM USERS [42001-200]

@@ -2,7 +2,9 @@ package hexlet.code.controllers;
 
 import hexlet.code.dtos.UserDto;
 import hexlet.code.model.User;
+import hexlet.code.repositories.UserRepository;
 import hexlet.code.services.UserServiceImpl;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,12 +20,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/")
 public class UserController {
-
     private final UserServiceImpl userService;
 
-    public UserController(UserServiceImpl userService) {
+    private final UserRepository userRepository;
+
+    public UserController(UserServiceImpl userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
+
+    private static final String ONLY_OWNER_BY_ID = """
+            @userRepository.findById(#id).get().getEmail().toString() == authentication.getPrincipal().getUsername()
+        """;
 
     @GetMapping("/api/users")
     public List<User> getAll() {
@@ -41,12 +49,14 @@ public class UserController {
     }
 
     @PutMapping("/api/users/{id}")
+    @PreAuthorize(ONLY_OWNER_BY_ID)
     public void update(@PathVariable final long id,
                        @RequestBody @Valid final UserDto userDto) {
         userService.updateUser(id, userDto);
     }
 
     @DeleteMapping("/api/users/{id}")
+    @PreAuthorize(ONLY_OWNER_BY_ID)
     public void delete(@PathVariable final long id) {
         userService.deleteUserById(id);
     }
