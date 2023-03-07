@@ -49,7 +49,6 @@ public class User {
     @Size(min = 3, max = 100)
     private String password;
 
-    @JsonIgnore
     @CreationTimestamp
     @Temporal(TIMESTAMP)
     private Date createdAt;

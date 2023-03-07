@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserServiceImpl userService;
 
@@ -33,31 +33,31 @@ public class UserController {
             @userRepository.findById(#id).get().getEmail().toString() == authentication.getPrincipal().getUsername()
         """;
 
-    @GetMapping("/api/users")
+    @GetMapping
     public List<User> getAll() {
         return userService.findAll();
     }
 
-    @PostMapping("/api/users")
+    @PostMapping
     public void createUser(@RequestBody @Valid final UserDto userDto) {
         userService.createUser(userDto);
     }
 
-    @GetMapping("/api/users/{id}")
+    @GetMapping("/{id}")
     public User getUserById(@PathVariable final Long id) {
-        return userService.findUserById(id).get();
+        return userService.findUserById(id);
     }
 
-    @PutMapping("/api/users/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize(ONLY_OWNER_BY_ID)
     public void update(@PathVariable final long id,
                        @RequestBody @Valid final UserDto userDto) {
         userService.updateUser(id, userDto);
     }
 
-    @DeleteMapping("/api/users/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize(ONLY_OWNER_BY_ID)
     public void delete(@PathVariable final long id) {
-        userService.deleteUserById(id);
+        userService.deleteUser(id);
     }
 }

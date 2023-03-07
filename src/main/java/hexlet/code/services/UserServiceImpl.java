@@ -58,8 +58,8 @@ public class UserServiceImpl implements UserDetailsService {
         return role.get();
     }
 
-    public Optional<User> findUserById(Long id) {
-        return userRepository.findById(id);
+    public User findUserById(Long id) {
+        return userRepository.findById(id).get();
     }
 
     public void updateUser(long id, UserDto userDto) {
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void deleteUserById(long id) {
+    public void deleteUser(long id) {
         userRepository.deleteById(id);
     }
 

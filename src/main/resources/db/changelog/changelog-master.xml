@@ -75,4 +75,16 @@
             <column name="name" value="ROLE_USER"/>
         </insert>
     </changeSet>
+    <changeSet author="mteplinskaya (generated)" id="1678201207732-3">
+        <createTable tableName="task_status">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_statusPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mteplinskaya (generated)" id="1678201207732-2">
+        <addNotNullConstraint columnDataType="boolean" columnName="active" tableName="users" validate="true"/>
+    </changeSet>
 </databaseChangeLog>
