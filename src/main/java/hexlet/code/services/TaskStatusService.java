@@ -20,14 +20,14 @@ public class TaskStatusService {
     public TaskStatus findStatusById(Long id) {
         return taskStatusRepository.findById(id).get();
     }
-    public void createStatus(TaskStatus status) {
-        taskStatusRepository.save(status);
+    public TaskStatus createStatus(TaskStatus status) {
+        return taskStatusRepository.save(status);
     }
 
-    public void updateStatus(Long id, TaskStatus status) {
+    public TaskStatus updateStatus(Long id, TaskStatus status) {
         TaskStatus statusInDB = taskStatusRepository.findById(id).get();
         statusInDB.setName(status.getName());
-        taskStatusRepository.save(statusInDB);
+        return taskStatusRepository.save(statusInDB);
     }
 
     public void deleteStatus(Long id) {
