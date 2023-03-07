@@ -61,8 +61,11 @@ public class TaskService {
         //if author null then exception
         task.setAuthor(author);
 
-        User executor = userService.findUserById(dto.getExecutorId());
-        task.setExecutor(executor);
+        Long executorId = dto.getExecutorId();
+        if (executorId != null) {
+            User executor = userService.findUserById(executorId);
+            task.setExecutor(executor);
+        }
 
         return task;
     }
