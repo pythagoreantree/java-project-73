@@ -1,8 +1,6 @@
 package hexlet.code.services;
 
-import hexlet.code.dtos.UserDto;
 import hexlet.code.model.TaskStatus;
-import hexlet.code.model.User;
 import hexlet.code.repositories.TaskStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

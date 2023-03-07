@@ -1,7 +1,6 @@
 package hexlet.code.controllers;
 
 import hexlet.code.dtos.jwt.AuthenticationRequest;
-import hexlet.code.dtos.jwt.AuthenticationResponse;
 import hexlet.code.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

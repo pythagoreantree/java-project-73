@@ -48,7 +48,9 @@ public class UserServiceImpl implements UserDetailsService {
 
     private void initRoles(User user) {
         List<Role> roles = user.getRoles();
-        if (roles == null) roles = new ArrayList<>();
+        if (roles == null) {
+            roles = new ArrayList<>();
+        }
         roles.add(getUserRole());
         user.setRoles(roles);
     }
