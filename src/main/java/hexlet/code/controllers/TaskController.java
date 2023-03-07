@@ -40,8 +40,8 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public void update(@PathVariable final long id,
-                       @RequestBody @Valid final Task task) {
-        taskService.updateTask(id, task);
+                       @RequestBody @Valid final TaskDto taskDto) {
+        taskService.updateTask(id, taskDto);
     }
 
     @DeleteMapping("/{id}")

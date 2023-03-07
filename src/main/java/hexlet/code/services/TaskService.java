@@ -37,12 +37,14 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public void updateTask(Long id, Task task) {
-
+    public void updateTask(Long id, TaskDto taskDto) {
+        Task task = taskRepository.findById(id).get();
+        updateFromDto(task, taskDto);
+        taskRepository.save(task);
     }
 
     public void deleteTask(Long id) {
-
+        taskRepository.deleteById(id);
     }
 
     private Task fromDto(final TaskDto dto) {
@@ -68,5 +70,21 @@ public class TaskService {
         }
 
         return task;
+    }
+
+    private void updateFromDto(Task task, TaskDto taskDto) {
+        task.setName(taskDto.getName());
+        task.setDescription(taskDto.getDescription());
+
+        Long taskStatusId = taskDto.getTaskStatusId();
+        TaskStatus taskStatus = taskStatusService.findStatusById(taskStatusId);
+        //if task status null then exception
+        task.setTaskStatus(taskStatus);
+
+        Long executorId = taskDto.getExecutorId();
+        if (executorId != null) {
+            User executor = userService.findUserById(executorId);
+            task.setExecutor(executor);
+        }
     }
 }
