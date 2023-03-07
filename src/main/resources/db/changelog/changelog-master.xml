@@ -87,4 +87,26 @@
     <changeSet author="mteplinskaya (generated)" id="1678201207732-2">
         <addNotNullConstraint columnDataType="boolean" columnName="active" tableName="users" validate="true"/>
     </changeSet>
+    <changeSet author="mteplinskaya (generated)" id="1678206699706-2">
+        <createTable tableName="tasks">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tasksPK"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="author_id" type="BIGINT"/>
+            <column name="executor_id" type="BIGINT"/>
+            <column name="task_status_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mteplinskaya (generated)" id="1678206699706-3">
+        <addForeignKeyConstraint baseColumnNames="executor_id" baseTableName="tasks" constraintName="FKbrg922bkqn5m7212jsqjg6ioe" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="mteplinskaya (generated)" id="1678206699706-4">
+        <addForeignKeyConstraint baseColumnNames="task_status_id" baseTableName="tasks" constraintName="FKe3ebe6kjret8akcdil10eh2wc" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="task_status" validate="true"/>
+    </changeSet>
+    <changeSet author="mteplinskaya (generated)" id="1678206699706-5">
+        <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="tasks" constraintName="FKhods8r8oyyx7tuj3c91ki2sk1" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
 </databaseChangeLog>
