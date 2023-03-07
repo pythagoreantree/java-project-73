@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private static final String ROLE_USER = "ROLE_USER";
     @Autowired
@@ -62,6 +62,10 @@ public class UserServiceImpl implements UserDetailsService {
 
     public User findUserById(Long id) {
         return userRepository.findById(id).get();
+    }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email).get();
     }
 
     public void updateUser(long id, UserDto userDto) {

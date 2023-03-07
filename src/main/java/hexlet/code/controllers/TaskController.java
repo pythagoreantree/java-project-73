@@ -2,7 +2,6 @@ package hexlet.code.controllers;
 
 import hexlet.code.dtos.TaskDto;
 import hexlet.code.model.Task;
-import hexlet.code.model.TaskStatus;
 import hexlet.code.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
