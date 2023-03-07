@@ -29,19 +29,19 @@ public class TaskController {
     }
 
     @PostMapping
-    public void create(@RequestBody @Valid final TaskDto taskDto) {
-        taskService.createTask(taskDto);
+    public Task create(@RequestBody @Valid final TaskDto taskDto) {
+        return taskService.createTask(taskDto);
     }
 
     @GetMapping("/{id}")
-    public Task findById(Long id) {
+    public Task findById(@PathVariable final long id) {
         return taskService.findTaskById(id);
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable final long id,
+    public Task update(@PathVariable final long id,
                        @RequestBody @Valid final TaskDto taskDto) {
-        taskService.updateTask(id, taskDto);
+        return taskService.updateTask(id, taskDto);
     }
 
     @DeleteMapping("/{id}")

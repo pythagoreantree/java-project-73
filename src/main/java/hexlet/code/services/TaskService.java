@@ -32,15 +32,15 @@ public class TaskService {
         return taskRepository.findById(id).get();
     }
 
-    public void createTask(TaskDto taskDto) {
+    public Task createTask(TaskDto taskDto) {
         Task task = fromDto(taskDto);
-        taskRepository.save(task);
+        return taskRepository.save(task);
     }
 
-    public void updateTask(Long id, TaskDto taskDto) {
+    public Task updateTask(Long id, TaskDto taskDto) {
         Task task = taskRepository.findById(id).get();
         updateFromDto(task, taskDto);
-        taskRepository.save(task);
+        return taskRepository.save(task);
     }
 
     public void deleteTask(Long id) {

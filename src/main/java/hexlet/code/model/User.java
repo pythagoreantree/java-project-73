@@ -40,6 +40,11 @@ public class User {
     @GeneratedValue(strategy = AUTO)
     private Long id;
 
+    @Email
+    @NotBlank
+    @Column(unique = true)
+    private String email;
+
     @NotBlank
     @Size(min = 1)
     private String firstName;
@@ -47,11 +52,6 @@ public class User {
     @NotBlank
     @Size(min = 1)
     private String lastName;
-
-    @Email
-    @NotBlank
-    @Column(unique = true)
-    private String email;
 
     @JsonIgnore
     @NotBlank

@@ -32,22 +32,22 @@ public class Task {
     @GeneratedValue(strategy = AUTO)
     private Long id;
 
-    @NotBlank
-    @Size(min = 1)
-    private String name;
-
-    private String description;
-
-    @NotNull
-    @ManyToOne
-    private TaskStatus taskStatus;
-
     @NotNull
     @ManyToOne
     private User author;
 
     @ManyToOne
     private User executor;
+
+    @NotNull
+    @ManyToOne
+    private TaskStatus taskStatus;
+
+    @NotBlank
+    @Size(min = 1)
+    private String name;
+
+    private String description;
 
     @CreationTimestamp
     @Temporal(TIMESTAMP)
