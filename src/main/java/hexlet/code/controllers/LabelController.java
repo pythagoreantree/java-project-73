@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/labels")
+@RequestMapping("/api/labels")
 public class LabelController {
 
     @Autowired
