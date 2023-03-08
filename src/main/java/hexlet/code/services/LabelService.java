@@ -2,7 +2,6 @@ package hexlet.code.services;
 
 import hexlet.code.model.Label;
 import hexlet.code.repositories.LabelRepository;
-import hexlet.code.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
