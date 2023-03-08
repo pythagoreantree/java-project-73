@@ -25,9 +25,9 @@ public class TaskStatusService {
     }
 
     public TaskStatus updateStatus(Long id, TaskStatus status) {
-        TaskStatus statusInDB = taskStatusRepository.findById(id).get();
-        statusInDB.setName(status.getName());
-        return taskStatusRepository.save(statusInDB);
+        TaskStatus existingStatus = findStatusById(id);
+        existingStatus.setName(status.getName());
+        return taskStatusRepository.save(existingStatus);
     }
 
     public void deleteStatus(Long id) {
