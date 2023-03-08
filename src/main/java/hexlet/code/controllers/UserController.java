@@ -30,7 +30,7 @@ public class UserController {
     }
 
     private static final String ONLY_OWNER_BY_ID = """
-            @userRepository.findById(#id).get().getEmail().toString() == authentication.getPrincipal().getUsername()
+            @userRepository.findById(#id).get().getEmail() == authentication.name
         """;
 
     @GetMapping
@@ -39,8 +39,8 @@ public class UserController {
     }
 
     @PostMapping
-    public void createUser(@RequestBody @Valid final UserDto userDto) {
-        userService.createUser(userDto);
+    public User createUser(@RequestBody @Valid final UserDto userDto) {
+        return userService.createUser(userDto);
     }
 
     @GetMapping("/{id}")
@@ -50,9 +50,9 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize(ONLY_OWNER_BY_ID)
-    public void update(@PathVariable final long id,
+    public User update(@PathVariable final long id,
                        @RequestBody @Valid final UserDto userDto) {
-        userService.updateUser(id, userDto);
+        return userService.updateUser(id, userDto);
     }
 
     @DeleteMapping("/{id}")

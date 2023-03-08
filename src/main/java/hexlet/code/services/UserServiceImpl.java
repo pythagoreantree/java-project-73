@@ -36,14 +36,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .toList();
     }
 
-    public void createUser(UserDto userDto) {
+    public User createUser(UserDto userDto) {
         final User user = new User();
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         initRoles(user);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     private void initRoles(User user) {
@@ -68,13 +68,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByEmail(email).get();
     }
 
-    public void updateUser(long id, UserDto userDto) {
+    public User updateUser(long id, UserDto userDto) {
         final User user = userRepository.findById(id).get();
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public void deleteUser(long id) {
