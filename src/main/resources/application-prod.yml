@@ -12,10 +12,12 @@ spring:
       enabled: false
 
   datasource:
-    url: jdbc:postgresql://dpg-cg580gseoogsv95m2frg-a:5432/tmdb_hk4c
-    username: maria
-    password: C7ABRifAsLxJnsBXm0AS5lB9c2EQng62
-    driver-class-name: org.postgresql.Driver
+    url: ${JDBC_DATABASE_URL}
+#    url: jdbc:postgresql://localhost:5432/tmdb
+#    username: masha
+#    password: good
+#    driver-class-name: org.postgresql.Driver
+
 
   jpa:
     hibernate:
