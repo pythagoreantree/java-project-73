@@ -1,5 +1,6 @@
 package hexlet.code.services;
 
+import com.querydsl.core.types.Predicate;
 import hexlet.code.dtos.TaskDto;
 import hexlet.code.model.Label;
 import hexlet.code.model.Task;
@@ -11,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,8 +30,8 @@ public class TaskService {
     @Autowired
     private LabelService labelService;
 
-    public List<Task> findAll() {
-        return taskRepository.findAll();
+    public Iterable<Task> findAll(Predicate predicate) {
+        return taskRepository.findAll(predicate);
     }
 
     public Task findTaskById(Long id) {
