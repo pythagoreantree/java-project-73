@@ -3,9 +3,11 @@ package hexlet.code.controllers;
 import com.querydsl.core.types.Predicate;
 import hexlet.code.dtos.TaskDto;
 import hexlet.code.model.Task;
+import hexlet.code.repositories.TaskRepository;
 import hexlet.code.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,13 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private TaskRepository taskRepository;
+
+    private static final String ONLY_AUTHOR_BY_ID = """
+            @taskRepository.findById(#id).get().getAuthor().getEmail() == authentication.name
+            """;
 
     @GetMapping
     public Iterable<Task> getAll(@QuerydslPredicate(root = Task.class) Predicate predicate) {
@@ -46,6 +55,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(ONLY_AUTHOR_BY_ID)
     public void delete(@PathVariable final long id) {
         taskService.deleteTask(id);
     }
