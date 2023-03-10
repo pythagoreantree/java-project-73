@@ -1,7 +1,17 @@
 package hexlet.code.controllers;
 
+import hexlet.code.dtos.TaskDto;
+import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.services.TaskStatusService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,40 +20,70 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @RestController
 @RequestMapping("/api/statuses")
+@SecurityRequirement(name = "javainuseapi")
 public class TaskStatusController {
 
     @Autowired
     private TaskStatusService taskStatusService;
 
+    public static final String ID = "/{id}";
+
+    @Operation(summary = "Get Task statuses")
+    @ApiResponses(
+            @ApiResponse(responseCode = "200", content =
+                @Content(array = @ArraySchema(schema = @Schema(implementation = TaskStatus.class)))
+            )
+    )
     @GetMapping
     public List<TaskStatus> getAll() {
         return taskStatusService.findAll();
     }
 
+    @Operation(summary = "Create new Task Status")
+    @ApiResponse(responseCode = "201", description = "Task status created")
     @PostMapping
-    public TaskStatus create(@RequestBody @Valid final TaskStatus taskStatus) {
+    @ResponseStatus(CREATED)
+    public TaskStatus create(
+            @Parameter(schema = @Schema(implementation = TaskStatus.class))
+            @RequestBody @Valid final TaskStatus taskStatus) {
         return taskStatusService.createStatus(taskStatus);
     }
 
-    @GetMapping("/{id}")
-    public TaskStatus getById(@PathVariable final Long id) {
+    @Operation(summary = "Get Task status by Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Task status found"),
+            @ApiResponse(responseCode = "404", description = "Task status with that id not found")
+    })
+    @GetMapping(ID)
+    public TaskStatus getById(@PathVariable final long id) {
         return taskStatusService.findStatusById(id);
     }
 
-    @PutMapping("/{id}")
+    @Operation(summary = "Update Task status")
+    @ApiResponse(responseCode = "200", description = "Task status updated")
+    @PutMapping(ID)
     public TaskStatus update(@PathVariable final long id,
-                       @RequestBody @Valid final TaskStatus taskStatus) {
+                             @Parameter(schema = @Schema(implementation = TaskStatus.class))
+                             @RequestBody @Valid final TaskStatus taskStatus) {
         return taskStatusService.updateStatus(id, taskStatus);
     }
 
-    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete Task status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Task status deleted"),
+            @ApiResponse(responseCode = "404", description = "Task status with that id not found")
+    })
+    @DeleteMapping(ID)
     public void delete(@PathVariable final long id) {
         taskStatusService.deleteStatus(id);
     }
