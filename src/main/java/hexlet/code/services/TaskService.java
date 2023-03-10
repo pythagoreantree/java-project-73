@@ -1,6 +1,7 @@
 package hexlet.code.services;
 
 import hexlet.code.dtos.TaskDto;
+import hexlet.code.model.Label;
 import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
@@ -11,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -23,6 +26,9 @@ public class TaskService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LabelService labelService;
 
     public List<Task> findAll() {
         return taskRepository.findAll();
@@ -52,39 +58,54 @@ public class TaskService {
         task.setName(dto.getName());
         task.setDescription(dto.getDescription());
 
-        Long taskStatusId = dto.getTaskStatusId();
-        TaskStatus taskStatus = taskStatusService.findStatusById(taskStatusId);
-        //if task status null then exception
-        task.setTaskStatus(taskStatus);
+        task.setAuthor(getAuthor(dto));
+        task.setExecutor(getExecutor(dto));
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String authorEmail = auth.getName();
-        User author = userService.findUserByEmail(authorEmail);
-        //if author null then exception
-        task.setAuthor(author);
-
-        Long executorId = dto.getExecutorId();
-        if (executorId != null) {
-            User executor = userService.findUserById(executorId);
-            task.setExecutor(executor);
-        }
+        task.setTaskStatus(getStatus(dto));
+        task.setLabels(getLabels(dto));
 
         return task;
     }
 
-    private void updateFromDto(Task task, TaskDto taskDto) {
-        task.setName(taskDto.getName());
-        task.setDescription(taskDto.getDescription());
+    private void updateFromDto(Task task, TaskDto dto) {
+        task.setName(dto.getName());
+        task.setDescription(dto.getDescription());
 
-        Long taskStatusId = taskDto.getTaskStatusId();
-        TaskStatus taskStatus = taskStatusService.findStatusById(taskStatusId);
-        //if task status null then exception
-        task.setTaskStatus(taskStatus);
+        task.setTaskStatus(getStatus(dto));
+        task.setLabels(getLabels(dto));
+        task.setExecutor(getExecutor(dto));
+    }
 
-        Long executorId = taskDto.getExecutorId();
+    private User getExecutor(TaskDto dto) {
+        Long executorId = dto.getExecutorId();
         if (executorId != null) {
             User executor = userService.findUserById(executorId);
-            task.setExecutor(executor);
+            return executor;
         }
+        return null;
     }
+
+    private User getAuthor(TaskDto dto) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String authorEmail = auth.getName();
+        User author = userService.findUserByEmail(authorEmail);
+        //if author null then exception
+        return author;
+    }
+
+    private Set<Label> getLabels(TaskDto dto) {
+        Set<Long> labelIds = dto.getLabelIds();
+        Set<Label> labels = labelIds.stream().map(id -> labelService.findLabelById(id))
+                .collect(Collectors.toSet());
+        return labels;
+    }
+
+    private TaskStatus getStatus(TaskDto dto) {
+        Long taskStatusId = dto.getTaskStatusId();
+        TaskStatus taskStatus = taskStatusService.findStatusById(taskStatusId);
+        //if task status null then exception
+        return taskStatus;
+    }
+
+
 }
