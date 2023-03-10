@@ -44,7 +44,7 @@ public class BaseExceptionHandler {
     @ResponseStatus(UNAUTHORIZED)
     @ExceptionHandler(BadCredentialsException.class)
     public ResponceError badCredentialsException(BadCredentialsException ex) {
-        return new ResponceError (
+        return new ResponceError(
                 getStatus(UNAUTHORIZED),
                 ex.getMessage()
         );
@@ -53,7 +53,7 @@ public class BaseExceptionHandler {
     @ResponseStatus(FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
     public ResponceError accessDeniedException(AccessDeniedException ex) {
-        return new ResponceError (
+        return new ResponceError(
                 getStatus(FORBIDDEN),
                 ex.getMessage()
         );
