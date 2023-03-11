@@ -96,7 +96,7 @@ public class UserControllerIT {
                 .andReturn()
                 .getResponse();
 
-        final User user = fromJson(response.getContentAsString(), new TypeReference<>() { } );
+        final User user = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertEquals(expectedUser.getId(), user.getId());
         assertEquals(expectedUser.getEmail(), user.getEmail());
@@ -112,7 +112,7 @@ public class UserControllerIT {
                 .andReturn()
                 .getResponse();
 
-        final List<User> users = fromJson(response.getContentAsString(), new TypeReference<>() { } );
+        final List<User> users = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertThat(users.size() == 1);
     }
@@ -142,7 +142,7 @@ public class UserControllerIT {
         assertNull(userRepository.findByEmail(DEFAULT_USER_EMAIL).orElse(null));
         assertNotNull(userRepository.findByEmail(updatedEmail).orElse(null));
 
-        final User user = fromJson(response.getContentAsString(), new TypeReference<>() { } );
+        final User user = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertEquals(1L, user.getId());
         assertEquals(updatedEmail, user.getEmail());
