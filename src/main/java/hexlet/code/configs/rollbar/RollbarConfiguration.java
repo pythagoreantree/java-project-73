@@ -20,10 +20,6 @@ public class RollbarConfiguration {
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
-    private static final String PROD = "prod";
-
-    private static final String DEVELOPMENT = "development";
-
     @Bean
     public Rollbar rollbar() {
         return new Rollbar(getRollbarConfigs(rollbarToken));
@@ -31,8 +27,7 @@ public class RollbarConfiguration {
 
     private Config getRollbarConfigs(String accessToken) {
         return RollbarSpringConfigBuilder.withAccessToken(accessToken)
-                .environment(DEVELOPMENT)
-                .enabled(activeProfile.equals(PROD))
+                .environment(activeProfile)
                 .build();
     }
 }
