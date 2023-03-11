@@ -22,7 +22,7 @@ public class RollbarConfiguration {
 
     private static final String PROD = "prod";
 
-    private static final String DEV = "dev";
+    private static final String DEV = "development";
 
     @Bean
     public Rollbar rollbar() {
