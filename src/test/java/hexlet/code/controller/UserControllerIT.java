@@ -31,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -97,7 +96,7 @@ public class UserControllerIT {
                 .andReturn()
                 .getResponse();
 
-        final User user = fromJson(response.getContentAsString(), new TypeReference<>() {});
+        final User user = fromJson(response.getContentAsString(), new TypeReference<>() { } );
 
         assertEquals(expectedUser.getId(), user.getId());
         assertEquals(expectedUser.getEmail(), user.getEmail());
@@ -113,7 +112,7 @@ public class UserControllerIT {
                 .andReturn()
                 .getResponse();
 
-        final List<User> users = fromJson(response.getContentAsString(), new TypeReference<>() {});
+        final List<User> users = fromJson(response.getContentAsString(), new TypeReference<>() { } );
 
         assertThat(users.size() == 1);
     }
@@ -143,7 +142,7 @@ public class UserControllerIT {
         assertNull(userRepository.findByEmail(DEFAULT_USER_EMAIL).orElse(null));
         assertNotNull(userRepository.findByEmail(updatedEmail).orElse(null));
 
-        final User user = fromJson(response.getContentAsString(), new TypeReference<>() {});
+        final User user = fromJson(response.getContentAsString(), new TypeReference<>() { } );
 
         assertEquals(1L, user.getId());
         assertEquals(updatedEmail, user.getEmail());
