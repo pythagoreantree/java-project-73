@@ -22,7 +22,7 @@ public class RollbarConfiguration {
 
     private static final String PROD = "prod";
 
-    private static final String DEV = "development";
+    private static final String DEVELOPMENT = "development";
 
     @Bean
     public Rollbar rollbar() {
@@ -31,7 +31,7 @@ public class RollbarConfiguration {
 
     private Config getRollbarConfigs(String accessToken) {
         return RollbarSpringConfigBuilder.withAccessToken(accessToken)
-                .environment(DEV)
+                .environment(DEVELOPMENT)
                 .enabled(activeProfile.equals(PROD))
                 .build();
     }
