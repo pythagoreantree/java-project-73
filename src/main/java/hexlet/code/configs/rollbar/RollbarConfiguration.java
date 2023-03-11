@@ -1,14 +1,23 @@
 package hexlet.code.configs.rollbar;
 
-//@Configuration()
-//@EnableWebMvc
-//@ComponentScan({"hexlet.code"})
+import com.rollbar.notifier.Rollbar;
+import com.rollbar.notifier.config.Config;
+import com.rollbar.spring.webmvc.RollbarSpringConfigBuilder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+@Configuration()
+@EnableWebMvc
+@ComponentScan({"hexlet.code"})
 public class RollbarConfiguration {
 
-    /*@Value("${ROLLBAR_TOKEN}")
+    @Value("${rollbar.token}")
     private String rollbarToken;
 
-    @Value("${APP_ENV}")
+    @Value("${spring.profiles.active}")
     private String activeProfile;
 
     private static final String PROD = "prod";
@@ -25,5 +34,5 @@ public class RollbarConfiguration {
                 .environment(DEVELOPMENT)
                 .enabled(activeProfile.equals(PROD))
                 .build();
-    }*/
+    }
 }
