@@ -3,16 +3,16 @@ package hexlet.code.services;
 import hexlet.code.dtos.TaskStatusDto;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.repositories.TaskStatusRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class TaskStatusService {
 
-    private final TaskStatusRepository taskStatusRepository;
+    @Autowired
+    private TaskStatusRepository taskStatusRepository;
 
     public List<TaskStatus> findAll() {
         return taskStatusRepository.findAll();

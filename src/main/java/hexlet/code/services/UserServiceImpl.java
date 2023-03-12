@@ -1,12 +1,12 @@
 package hexlet.code.services;
 
-import hexlet.code.dtos.UserDetailsImpl;
 import hexlet.code.dtos.UserDto;
 import hexlet.code.model.Role;
 import hexlet.code.model.User;
+import hexlet.code.dtos.UserDetailsImpl;
 import hexlet.code.repositories.RoleRepository;
 import hexlet.code.repositories.UserRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,15 +18,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private static final String ROLE_USER = "ROLE_USER";
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> findAll() {
         return userRepository.findAll()

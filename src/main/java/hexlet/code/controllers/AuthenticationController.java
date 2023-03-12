@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,15 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/login")
-@AllArgsConstructor
+@RequestMapping("/")
 public class AuthenticationController {
 
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    private final UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Operation(summary = "Authenticate User")
     @ApiResponses(value = {
@@ -44,7 +46,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
                     content = @Content)
     })
-    @PostMapping
+    @PostMapping("/api/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest request) {
 
         authenticationManager.authenticate(

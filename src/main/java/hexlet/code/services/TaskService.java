@@ -7,7 +7,7 @@ import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
 import hexlet.code.repositories.TaskRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,16 +16,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class TaskService {
 
-    private final TaskRepository taskRepository;
+    @Autowired
+    private TaskRepository taskRepository;
 
-    private final TaskStatusService taskStatusService;
+    @Autowired
+    private TaskStatusService taskStatusService;
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final LabelService labelService;
+    @Autowired
+    private LabelService labelService;
 
     public Iterable<Task> findAll(Predicate predicate) {
         return taskRepository.findAll(predicate);
