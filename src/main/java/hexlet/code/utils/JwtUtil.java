@@ -14,8 +14,11 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-    @Value("${jwt.token.secret}")
-    private String secret;
+    private final String secret;
+
+    public JwtUtil(@Value("${jwt.token.secret}") String secret) {
+        this.secret = secret;
+    }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
