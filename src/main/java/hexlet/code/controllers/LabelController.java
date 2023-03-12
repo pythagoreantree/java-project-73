@@ -1,6 +1,7 @@
 package hexlet.code.controllers;
 
 import hexlet.code.dtos.LabelDto;
+import hexlet.code.dtos.exceptions.ResponseError;
 import hexlet.code.model.Label;
 import hexlet.code.services.LabelService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,18 +39,46 @@ public class LabelController {
     public static final String ID = "/{id}";
 
     @Operation(summary = "Get all Labels")
-    @ApiResponses(
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =
-                @Content(array = @ArraySchema(schema = @Schema(implementation = Label.class)))
-            )
-    )
+                @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = Label.class)))
+            ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Error getting all labels",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
+
+    })
     @GetMapping
     public List<Label> getAll() {
         return labelService.findAll();
     }
 
     @Operation(summary = "Create new Label")
-    @ApiResponse(responseCode = "201", description = "Label created")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Label created",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Label.class)))
+            ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Error creating label",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
+
+    })
     @PostMapping
     @ResponseStatus(CREATED)
     public Label create(
@@ -60,8 +89,19 @@ public class LabelController {
 
     @Operation(summary = "Get label by Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Label found"),
-            @ApiResponse(responseCode = "404", description = "Label with that id not found")
+            @ApiResponse(responseCode = "200", description = "Label found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Label.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Label with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
     })
     @GetMapping(ID)
     public Label findById(
@@ -71,7 +111,21 @@ public class LabelController {
     }
 
     @Operation(summary = "Update Label")
-    @ApiResponse(responseCode = "200", description = "Label updated")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Label updated",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Label.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Label with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
+    })
     @PutMapping(ID)
     public Label update(
             @Parameter(description = "id of the label to be updated")
@@ -83,8 +137,18 @@ public class LabelController {
 
     @Operation(summary = "Delete Label")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Label deleted"),
-            @ApiResponse(responseCode = "404", description = "Label with that id not found")
+            @ApiResponse(responseCode = "200", description = "Label deleted",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Label with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
     })
     @DeleteMapping(ID)
     public void delete(

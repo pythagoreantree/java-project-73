@@ -26,10 +26,10 @@ public class TaskStatusService {
         return taskStatusRepository.save(taskStatus);
     }
 
-    public TaskStatus updateStatus(Long id, TaskStatus status) {
-        TaskStatus existingStatus = findStatusById(id);
-        existingStatus.setName(status.getName());
-        return taskStatusRepository.save(existingStatus);
+    public TaskStatus updateStatus(Long id, TaskStatusDto statusDto) {
+        TaskStatus status = findStatusById(id);
+        status.setName(statusDto.getName());
+        return taskStatusRepository.save(status);
     }
 
     public void deleteStatus(Long id) {

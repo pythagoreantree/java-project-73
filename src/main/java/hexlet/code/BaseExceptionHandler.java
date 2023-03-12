@@ -1,6 +1,6 @@
 package hexlet.code;
 
-import hexlet.code.dtos.exceptions.ResponceError;
+import hexlet.code.dtos.exceptions.ResponseError;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -43,8 +43,8 @@ public class BaseExceptionHandler {
 
     @ResponseStatus(UNAUTHORIZED)
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponceError badCredentialsException(BadCredentialsException ex) {
-        return new ResponceError(
+    public ResponseError badCredentialsException(BadCredentialsException ex) {
+        return new ResponseError(
                 getStatus(UNAUTHORIZED),
                 ex.getMessage()
         );
@@ -52,8 +52,8 @@ public class BaseExceptionHandler {
 
     @ResponseStatus(FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponceError accessDeniedException(AccessDeniedException ex) {
-        return new ResponceError(
+    public ResponseError accessDeniedException(AccessDeniedException ex) {
+        return new ResponseError(
                 getStatus(FORBIDDEN),
                 ex.getMessage()
         );

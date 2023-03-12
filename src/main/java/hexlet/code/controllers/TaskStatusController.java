@@ -1,6 +1,7 @@
 package hexlet.code.controllers;
 
 import hexlet.code.dtos.TaskStatusDto;
+import hexlet.code.dtos.exceptions.ResponseError;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.services.TaskStatusService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,19 +38,23 @@ public class TaskStatusController {
 
     public static final String ID = "/{id}";
 
-    @Operation(summary = "Get Task statuses")
-    @ApiResponses(
-            @ApiResponse(responseCode = "200", content =
-                @Content(array = @ArraySchema(schema = @Schema(implementation = TaskStatus.class)))
-            )
-    )
-    @GetMapping
-    public List<TaskStatus> getAll() {
-        return taskStatusService.findAll();
-    }
-
     @Operation(summary = "Create new Task Status")
-    @ApiResponse(responseCode = "201", description = "Task status created")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Task status created",
+                content = { @Content(mediaType = "application/json",
+                        schema = @Schema(implementation = TaskStatus.class))}
+        ),
+        @ApiResponse(responseCode = "401", description = "Unauthorized",
+                content = {@Content(mediaType = "application/json",
+                        schema = @Schema(implementation = ResponseError.class))}),
+        @ApiResponse(responseCode = "403", description = "Access Denied",
+                content = {@Content(mediaType = "application/json",
+                        schema = @Schema(implementation = ResponseError.class))}),
+        @ApiResponse(responseCode = "404", description = "Error creating task status",
+                content = @Content),
+        @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                content = @Content)
+    })
     @PostMapping
     @ResponseStatus(CREATED)
     public TaskStatus create(
@@ -58,10 +63,43 @@ public class TaskStatusController {
         return taskStatusService.createStatus(taskStatus);
     }
 
+    @Operation(summary = "Get Task statuses")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = TaskStatus.class)))
+            ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Error getting all task statuses",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
+    })
+    @GetMapping
+    public List<TaskStatus> getAll() {
+        return taskStatusService.findAll();
+    }
+
     @Operation(summary = "Get Task status by Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Task status found"),
-            @ApiResponse(responseCode = "404", description = "Task status with that id not found")
+            @ApiResponse(responseCode = "200", description = "Task status found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TaskStatus.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Task status with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
     })
     @GetMapping(ID)
     public TaskStatus getById(
@@ -71,20 +109,43 @@ public class TaskStatusController {
     }
 
     @Operation(summary = "Update Task status")
-    @ApiResponse(responseCode = "200", description = "Task status updated")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Task status updated",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TaskStatusDto.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Task status with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
+    })
     @PutMapping(ID)
     public TaskStatus update(
             @Parameter(description = "id of the task status to be updated")
             @PathVariable final long id,
-            @Parameter(schema = @Schema(implementation = TaskStatus.class))
-            @RequestBody @Valid final TaskStatus taskStatus) {
+            @Parameter(schema = @Schema(implementation = TaskStatusDto.class))
+            @RequestBody @Valid final TaskStatusDto taskStatus) {
         return taskStatusService.updateStatus(id, taskStatus);
     }
 
     @Operation(summary = "Delete Task status")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task status deleted"),
-            @ApiResponse(responseCode = "404", description = "Task status with that id not found")
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Task status with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
     })
     @DeleteMapping(ID)
     public void delete(
