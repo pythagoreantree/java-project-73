@@ -2,8 +2,13 @@ package hexlet.code.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import hexlet.code.config.SpringConfigForIT;
-import hexlet.code.dtos.TaskStatusDto;
+import hexlet.code.dtos.TaskDto;
+import hexlet.code.model.Label;
+import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
+import hexlet.code.model.User;
+import hexlet.code.repositories.LabelRepository;
+import hexlet.code.repositories.TaskRepository;
 import hexlet.code.repositories.TaskStatusRepository;
 import hexlet.code.repositories.UserRepository;
 import hexlet.code.utils.AuthorizationUtils;
@@ -22,8 +27,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.List;
+import java.util.Set;
 
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
+import static hexlet.code.controller.LabelControllerIT.DEFAULT_LABEL_NAME;
+import static hexlet.code.controller.TaskStatusControllerIT.DEFAULT_TASK_STATUS_NAME;
 import static hexlet.code.controller.UserControllerIT.DEFAULT_USER_EMAIL;
 import static hexlet.code.utils.JsonUtils.asJson;
 import static hexlet.code.utils.JsonUtils.fromJson;
@@ -43,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles(TEST_PROFILE)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = SpringConfigForIT.class)
-public class TaskStatusControllerIT {
+public class TaskControllerIT {
 
     @Autowired
     private AuthorizationUtils authUtils;
@@ -52,7 +60,13 @@ public class TaskStatusControllerIT {
     private UserUtils userUtils;
 
     @Autowired
+    private TaskRepository taskRepository;
+
+    @Autowired
     private TaskStatusRepository taskStatusRepository;
+
+    @Autowired
+    private LabelRepository labelRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -67,35 +81,35 @@ public class TaskStatusControllerIT {
 
     @AfterEach
     public void tearDown() {
+        taskRepository.deleteAll();
         taskStatusRepository.deleteAll();
+        labelRepository.deleteAll();
         userRepository.deleteAll();
     }
 
-    private static final String TASK_STATUS_CONTROLLER_PATH =  "/api/statuses";
+    private static final String TASK_CONTROLLER_PATH =  "/api/tasks";
 
-    private static final String TASK_STATUS_CONTROLLER_PATH_ID =  "/api/statuses/{id}";
+    private static final String TASK_CONTROLLER_PATH_ID =  "/api/tasks/{id}";
 
-    public static final String DEFAULT_TASK_STATUS_NAME = "New";
-
+    private static final String DEFAULT_TASK_NAME = "Task";
 
     @Test
-    public void createNewStatus() throws Exception {
+    public void createTask() throws Exception {
 
-        assertEquals(0, taskStatusRepository.count());
+        assertEquals(0, taskRepository.count());
 
-        addDefaultTaskStatus();
+        addDefaultTask();
 
-        assertEquals(1, taskStatusRepository.count());
+        assertEquals(1, taskRepository.count());
     }
 
     @Test
-    public void getStatusById() throws Exception {
+    public void getTaskById() throws Exception {
 
-        final TaskStatus defaultTaskStatus = addDefaultTaskStatus();
-        final Long defaultTaskStatusId = defaultTaskStatus.getId();
+        final Task defaultTask = addDefaultTask();
 
         final MockHttpServletRequestBuilder request = authUtils.getAuthRequest(
-                get(TASK_STATUS_CONTROLLER_PATH_ID, defaultTaskStatusId),
+                get(TASK_CONTROLLER_PATH_ID, defaultTask.getId()),
                 DEFAULT_USER_EMAIL
         );
 
@@ -104,38 +118,41 @@ public class TaskStatusControllerIT {
                 .andReturn()
                 .getResponse();
 
-        final TaskStatus taskStatus = fromJson(response.getContentAsString(), new TypeReference<>() { });
+        final Task task = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
-        assertEquals(defaultTaskStatus.getId(), taskStatus.getId());
-        assertEquals(defaultTaskStatus.getName(), taskStatus.getName());
+        assertEquals(defaultTask.getId(), task.getId());
+        assertEquals(defaultTask.getName(), task.getName());
+        assertEquals(defaultTask.getDescription(), task.getDescription());
+        assertEquals(defaultTask.getAuthor().getId(), task.getAuthor().getId());
     }
 
     @Test
-    public void getAllStatuses() throws Exception {
-        addDefaultTaskStatus();
+    public void getAllTasks() throws Exception {
+        addDefaultTask();
 
-        final MockHttpServletResponse response = mockMvc.perform(get(TASK_STATUS_CONTROLLER_PATH))
+        final MockHttpServletResponse response = mockMvc.perform(get(TASK_CONTROLLER_PATH))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
 
-        final List<TaskStatus> taskStatuses = fromJson(response.getContentAsString(), new TypeReference<>() { });
+        final List<Task> tasks = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
-        assertNotNull(taskStatuses);
-        assertEquals(taskStatuses.size(), 1);
+        assertNotNull(tasks);
+        assertEquals(tasks.size(), 1);
     }
 
     @Test
-    public void updateTaskStatus() throws Exception {
-        final TaskStatus defaultTaskStatus = addDefaultTaskStatus();
-        final Long defaultTaskStatusId = defaultTaskStatus.getId();
+    public void updateTask() throws Exception {
+        final Task defaultTask = addDefaultTask();
+        final Long defaultTaskId = defaultTask.getId();
 
-        final String newTaskStatusName = "In progress";
-        final TaskStatusDto taskStatusDto = new TaskStatusDto(newTaskStatusName);
+        final String newTaskName = "Code Refactoring";
+        final String newTaskDescription = "Refactor old code";
+        final TaskDto taskDto = getNewTask(newTaskName, newTaskDescription);
 
         final MockHttpServletRequestBuilder updateRequest = authUtils.getAuthRequest(
-                put(TASK_STATUS_CONTROLLER_PATH_ID, defaultTaskStatusId)
-                        .content(asJson(taskStatusDto))
+                put(TASK_CONTROLLER_PATH_ID, defaultTaskId)
+                        .content(asJson(taskDto))
                         .contentType(APPLICATION_JSON),
                 DEFAULT_USER_EMAIL
         );
@@ -145,42 +162,43 @@ public class TaskStatusControllerIT {
                 .andReturn()
                 .getResponse();
 
-        assertTrue(taskStatusRepository.existsById(defaultTaskStatusId));
-        assertNull(taskStatusRepository.findByName(DEFAULT_TASK_STATUS_NAME).orElse(null));
-        assertNotNull(taskStatusRepository.findByName(newTaskStatusName).orElse(null));
+        assertTrue(taskRepository.existsById(defaultTaskId));
+        assertNull(taskRepository.findByName(DEFAULT_TASK_NAME).orElse(null));
+        assertNotNull(taskRepository.findByName(newTaskName).orElse(null));
 
-        final TaskStatus taskStatus = fromJson(response.getContentAsString(), new TypeReference<>() { });
+        final Task task = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
-        assertNotNull(taskStatus);
-        assertEquals(defaultTaskStatusId, taskStatus.getId());
-        assertEquals(newTaskStatusName, taskStatus.getName());
+        assertNotNull(task);
+        assertEquals(defaultTaskId, task.getId());
+        assertEquals(newTaskName, task.getName());
+        assertEquals(newTaskDescription, task.getDescription());
     }
 
     @Test
-    public void deleteTaskStatus() throws Exception {
-        final TaskStatus defaultTaskStatus = addDefaultTaskStatus();
+    public void deleteTask() throws Exception {
+        final Task task = addDefaultTask();
 
         final MockHttpServletRequestBuilder deleteRequest = authUtils.getAuthRequest(
-                delete(TASK_STATUS_CONTROLLER_PATH_ID, defaultTaskStatus.getId()),
+                delete(TASK_CONTROLLER_PATH_ID, task.getId()),
                 DEFAULT_USER_EMAIL
         );
 
         mockMvc.perform(deleteRequest).andExpect(status().isOk());
 
-        assertEquals(0, taskStatusRepository.count());
+        assertEquals(0, taskRepository.count());
     }
 
-    private TaskStatus addDefaultTaskStatus() throws Exception {
-        return addTaskStatus(DEFAULT_TASK_STATUS_NAME);
+
+    private Task addDefaultTask() throws Exception {
+        return addTask(DEFAULT_TASK_NAME, "");
     }
 
-    private TaskStatus addTaskStatus(String statusName) throws Exception {
-
-        final TaskStatusDto taskStatusDto = new TaskStatusDto(statusName);
+    private Task addTask(String taskName, String taskDescription) throws Exception {
+        final TaskDto taskDto = getNewTask(taskName, taskDescription);
 
         final MockHttpServletRequestBuilder request = authUtils.getAuthRequest(
-                post(TASK_STATUS_CONTROLLER_PATH)
-                        .content(asJson(taskStatusDto))
+                post(TASK_CONTROLLER_PATH)
+                        .content(asJson(taskDto))
                         .contentType(APPLICATION_JSON),
                 DEFAULT_USER_EMAIL
         );
@@ -190,7 +208,25 @@ public class TaskStatusControllerIT {
                 .andReturn()
                 .getResponse();
 
-        final TaskStatus taskStatus = fromJson(response.getContentAsString(), new TypeReference<>() { });
-        return taskStatus;
+        final Task task = fromJson(response.getContentAsString(), new TypeReference<>() { });
+        return task;
+    }
+
+    private TaskDto getNewTask(String taskName, String taskDescription) {
+        final User user = userRepository.findByEmail(DEFAULT_USER_EMAIL).get();
+
+        final TaskStatus taskStatus = taskStatusRepository.save(
+                new TaskStatus(DEFAULT_TASK_STATUS_NAME));
+
+        final Label label = labelRepository.save(new Label(DEFAULT_LABEL_NAME));
+
+        final TaskDto task = new TaskDto(
+                taskName,
+                taskDescription,
+                user.getId(),
+                taskStatus.getId(),
+                Set.of(label.getId())
+        );
+        return task;
     }
 }

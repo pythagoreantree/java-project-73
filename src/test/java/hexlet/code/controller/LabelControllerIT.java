@@ -75,7 +75,7 @@ public class LabelControllerIT {
 
     private static final String LABEL_CONTROLLER_PATH_ID =  "/api/labels/{id}";
 
-    private static final String DEFAULT_LABEL_NAME = "Bug";
+    public static final String DEFAULT_LABEL_NAME = "Bug";
 
     @Test
     public void createLabel() throws Exception {

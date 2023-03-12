@@ -37,4 +37,8 @@ public class Label {
     @CreationTimestamp
     @Temporal(TIMESTAMP)
     private Date createdAt;
+
+    public Label(String name) {
+        this.name = name;
+    }
 }
