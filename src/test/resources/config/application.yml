@@ -4,15 +4,7 @@ spring:
   application:
     name: taskManager
 
-  profiles: test
-
-  datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:testtmdb
-    username: sa
-    password:
   jpa:
-    hibernate.ddl-auto: none
     show-sql: true
 
   liquibase:
