@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/login")
 @AllArgsConstructor
 public class AuthenticationController {
 
@@ -44,7 +44,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
                     content = @Content)
     })
-    @PostMapping("/api/login")
+    @PostMapping
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest request) {
 
         authenticationManager.authenticate(
