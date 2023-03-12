@@ -20,13 +20,15 @@ public class AuthorizationUtils {
 
     private static final String BEARER = "Bearer ";
 
-    public void addToken(MockHttpServletRequestBuilder request, String email) {
-        final String token = getToken(email);
-        request.header(AUTHORIZATION, token);
-    }
     private String getToken(String email) {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         final String token = jwtUtil.generateToken(userDetails);
         return BEARER + token;
+    }
+
+    public MockHttpServletRequestBuilder getAuthRequest(MockHttpServletRequestBuilder request, String email) {
+        final String token = getToken(email);
+        request.header(AUTHORIZATION, token);
+        return request;
     }
 }

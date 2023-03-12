@@ -39,4 +39,7 @@ public class TaskStatus {
     @Temporal(TIMESTAMP)
     private Date createdAt;
 
+    public TaskStatus(String name) {
+        this.name = name;
+    }
 }

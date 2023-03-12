@@ -1,5 +1,6 @@
 package hexlet.code.controllers;
 
+import hexlet.code.dtos.TaskStatusDto;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.services.TaskStatusService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,8 +53,8 @@ public class TaskStatusController {
     @PostMapping
     @ResponseStatus(CREATED)
     public TaskStatus create(
-            @Parameter(schema = @Schema(implementation = TaskStatus.class))
-            @RequestBody @Valid final TaskStatus taskStatus) {
+            @Parameter(schema = @Schema(implementation = TaskStatusDto.class))
+            @RequestBody @Valid final TaskStatusDto taskStatus) {
         return taskStatusService.createStatus(taskStatus);
     }
 
