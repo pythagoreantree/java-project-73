@@ -13,7 +13,6 @@ import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 
 @Configuration
 @Profile(TEST_PROFILE)
-@EnableAspectJAutoProxy
 @ComponentScan(basePackages = "hexlet.code")
 @PropertySource(value = "classpath:/config/application.yml")
 public class SpringConfigForIT {
