@@ -45,7 +45,7 @@ public class UserController {
             @userRepository.findById(#id).get().getEmail() == authentication.name
         """;
 
-    @Operation(summary = "Get Users")
+    @Operation(summary = "Get All Users")
     @ApiResponses(
             @ApiResponse(responseCode = "200", content =
             @Content(array = @ArraySchema(schema = @Schema(implementation = User.class)))
@@ -72,7 +72,9 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User with that id not found")
     })
     @GetMapping(ID)
-    public User getUserById(@PathVariable final Long id) {
+    public User getUserById(
+            @Parameter(description = "id of the user to be searched")
+            @PathVariable final Long id) {
         return userService.findUserById(id);
     }
 
@@ -83,9 +85,11 @@ public class UserController {
     })
     @PutMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
-    public User update(@PathVariable final long id,
-                       @Parameter(schema = @Schema(implementation = UserDto.class))
-                       @RequestBody @Valid final UserDto userDto) {
+    public User update(
+            @Parameter(description = "id of the user to be updated")
+            @PathVariable final long id,
+            @Parameter(schema = @Schema(implementation = UserDto.class))
+            @RequestBody @Valid final UserDto userDto) {
         return userService.updateUser(id, userDto);
     }
 
@@ -97,7 +101,9 @@ public class UserController {
     })
     @DeleteMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
-    public void delete(@PathVariable final long id) {
+    public void delete(
+            @Parameter(description = "id of the user to be deleted")
+            @PathVariable final long id) {
         userService.deleteUser(id);
     }
 }

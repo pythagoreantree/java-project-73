@@ -75,16 +75,20 @@ public class TaskController {
             @ApiResponse(responseCode = "404", description = "Task with that id not found")
     })
     @GetMapping(ID)
-    public Task findById(@PathVariable final long id) {
+    public Task findById(
+            @Parameter(description = "id of the task to be searched")
+            @PathVariable final long id) {
         return taskService.findTaskById(id);
     }
 
     @Operation(summary = "Update Task")
     @ApiResponse(responseCode = "200", description = "Task updated")
     @PutMapping(ID)
-    public Task update(@PathVariable final long id,
-                       @Parameter(schema = @Schema(implementation = TaskDto.class))
-                       @RequestBody @Valid final TaskDto taskDto) {
+    public Task update(
+            @Parameter(description = "id of the task to be updated")
+            @PathVariable final long id,
+            @Parameter(schema = @Schema(implementation = TaskDto.class))
+            @RequestBody @Valid final TaskDto taskDto) {
         return taskService.updateTask(id, taskDto);
     }
 
@@ -96,7 +100,9 @@ public class TaskController {
     })
     @DeleteMapping(ID)
     @PreAuthorize(ONLY_AUTHOR_BY_ID)
-    public void delete(@PathVariable final long id) {
+    public void delete(
+            @Parameter(description = "id of the task to be deleted")
+            @PathVariable final long id) {
         taskService.deleteTask(id);
     }
 }
