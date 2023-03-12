@@ -3,9 +3,7 @@ package hexlet.code.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import hexlet.code.config.SpringConfigForIT;
 import hexlet.code.dtos.LabelDto;
-import hexlet.code.dtos.TaskStatusDto;
 import hexlet.code.model.Label;
-import hexlet.code.model.TaskStatus;
 import hexlet.code.repositories.LabelRepository;
 import hexlet.code.repositories.UserRepository;
 import hexlet.code.utils.AuthorizationUtils;
@@ -23,14 +21,22 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import java.util.List;
+
 import static hexlet.code.config.SpringConfigForIT.TEST_PROFILE;
 import static hexlet.code.controller.UserControllerIT.DEFAULT_USER_EMAIL;
 import static hexlet.code.utils.JsonUtils.asJson;
 import static hexlet.code.utils.JsonUtils.fromJson;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -79,6 +85,88 @@ public class LabelControllerIT {
         addDefaultLabel();
 
         assertEquals(1, labelRepository.count());
+    }
+
+    @Test
+    public void getLabelById() throws Exception {
+
+        final Label defaultLabel = addDefaultLabel();
+        final Long defaultLabelId = defaultLabel.getId();
+
+        final MockHttpServletRequestBuilder request = authUtils.getAuthRequest(
+                get(LABEL_CONTROLLER_PATH_ID, defaultLabelId),
+                DEFAULT_USER_EMAIL
+        );
+
+        final MockHttpServletResponse response = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        final Label label = fromJson(response.getContentAsString(), new TypeReference<>() { });
+
+        assertEquals(defaultLabel.getId(), label.getId());
+        assertEquals(defaultLabel.getName(), label.getName());
+    }
+
+    @Test
+    public void getAllLabels() throws Exception {
+        addDefaultLabel();
+
+        final MockHttpServletResponse response = mockMvc.perform(get(LABEL_CONTROLLER_PATH))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        final List<Label> labels = fromJson(response.getContentAsString(), new TypeReference<>() { });
+
+        assertNotNull(labels);
+        assertEquals(labels.size(), 1);
+    }
+
+    @Test
+    public void updateLabel() throws Exception {
+        final Label defaultLabel = addDefaultLabel();
+        final Long defaultLabelId = defaultLabel.getId();
+
+        final String newLabelName = "Feature";
+        final LabelDto labelDto = new LabelDto(newLabelName);
+
+        final MockHttpServletRequestBuilder updateRequest = authUtils.getAuthRequest(
+                put(LABEL_CONTROLLER_PATH_ID, defaultLabelId)
+                        .content(asJson(labelDto))
+                        .contentType(APPLICATION_JSON),
+                DEFAULT_USER_EMAIL
+        );
+
+        final MockHttpServletResponse response = mockMvc.perform(updateRequest)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse();
+
+        assertTrue(labelRepository.existsById(defaultLabelId));
+        assertNull(labelRepository.findByName(DEFAULT_LABEL_NAME).orElse(null));
+        assertNotNull(labelRepository.findByName(newLabelName).orElse(null));
+
+        final Label label = fromJson(response.getContentAsString(), new TypeReference<>() { });
+
+        assertNotNull(label);
+        assertEquals(defaultLabelId, label.getId());
+        assertEquals(newLabelName, label.getName());
+    }
+
+    @Test
+    public void deleteLabel() throws Exception {
+        final Label label = addDefaultLabel();
+
+        final MockHttpServletRequestBuilder deleteRequest = authUtils.getAuthRequest(
+                delete(LABEL_CONTROLLER_PATH_ID, label.getId()),
+                DEFAULT_USER_EMAIL
+        );
+
+        mockMvc.perform(deleteRequest).andExpect(status().isOk());
+
+        assertEquals(0, labelRepository.count());
     }
 
     private Label addDefaultLabel() throws Exception {

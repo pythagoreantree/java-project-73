@@ -152,12 +152,12 @@ public class TaskStatusControllerIT {
         final TaskStatus taskStatus = fromJson(response.getContentAsString(), new TypeReference<>() { });
 
         assertNotNull(taskStatus);
-        assertEquals(defaultTaskStatus.getId(), taskStatus.getId());
+        assertEquals(defaultTaskStatusId, taskStatus.getId());
         assertEquals(newTaskStatusName, taskStatus.getName());
     }
 
     @Test
-    public void deleteUser() throws Exception {
+    public void deleteTaskStatus() throws Exception {
         final TaskStatus defaultTaskStatus = addDefaultTaskStatus();
 
         final MockHttpServletRequestBuilder deleteRequest = authUtils.getAuthRequest(
