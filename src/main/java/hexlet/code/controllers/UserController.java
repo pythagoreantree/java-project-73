@@ -4,7 +4,7 @@ import hexlet.code.dtos.UserDto;
 import hexlet.code.dtos.exceptions.ResponseError;
 import hexlet.code.model.User;
 import hexlet.code.repositories.UserRepository;
-import hexlet.code.services.UserServiceImpl;
+import hexlet.code.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,14 +34,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequestMapping("/api/users")
 @SecurityRequirement(name = "javainuseapi")
 public class UserController {
-    private final UserServiceImpl userService;
+    @Autowired
+    private UserService userService;
 
-    private final UserRepository userRepository;
-
-    public UserController(UserServiceImpl userService, UserRepository userRepository) {
-        this.userService = userService;
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     public static final String ID = "/{id}";
 
