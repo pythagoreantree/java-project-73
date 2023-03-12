@@ -64,16 +64,20 @@ public class TaskStatusController {
             @ApiResponse(responseCode = "404", description = "Task status with that id not found")
     })
     @GetMapping(ID)
-    public TaskStatus getById(@PathVariable final long id) {
+    public TaskStatus getById(
+            @Parameter(description = "id of the task status to be searched")
+            @PathVariable final long id) {
         return taskStatusService.findStatusById(id);
     }
 
     @Operation(summary = "Update Task status")
     @ApiResponse(responseCode = "200", description = "Task status updated")
     @PutMapping(ID)
-    public TaskStatus update(@PathVariable final long id,
-                             @Parameter(schema = @Schema(implementation = TaskStatus.class))
-                             @RequestBody @Valid final TaskStatus taskStatus) {
+    public TaskStatus update(
+            @Parameter(description = "id of the task status to be updated")
+            @PathVariable final long id,
+            @Parameter(schema = @Schema(implementation = TaskStatus.class))
+            @RequestBody @Valid final TaskStatus taskStatus) {
         return taskStatusService.updateStatus(id, taskStatus);
     }
 
@@ -83,7 +87,9 @@ public class TaskStatusController {
             @ApiResponse(responseCode = "404", description = "Task status with that id not found")
     })
     @DeleteMapping(ID)
-    public void delete(@PathVariable final long id) {
+    public void delete(
+            @Parameter(description = "id of the task status to be deleted")
+            @PathVariable final long id) {
         taskStatusService.deleteStatus(id);
     }
 }
