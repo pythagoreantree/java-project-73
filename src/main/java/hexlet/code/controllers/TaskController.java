@@ -2,6 +2,7 @@ package hexlet.code.controllers;
 
 import com.querydsl.core.types.Predicate;
 import hexlet.code.dtos.TaskDto;
+import hexlet.code.dtos.exceptions.ResponseError;
 import hexlet.code.model.Task;
 import hexlet.code.repositories.TaskRepository;
 import hexlet.code.services.TaskService;
@@ -48,10 +49,19 @@ public class TaskController {
 
     @Operation(summary = "Get Tasks by Predicate")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", content =
-                @Content(array = @ArraySchema(schema = @Schema(implementation = Task.class)))
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json",
+                        array = @ArraySchema(schema = @Schema(implementation = Task.class)))
             ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
             @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Error getting all tasks",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
                     content = @Content)
     })
     @GetMapping
@@ -65,8 +75,17 @@ public class TaskController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Task created",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Task.class))}),
+                            schema = @Schema(implementation = Task.class))}
+            ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
             @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Error creating task",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
                     content = @Content)
     })
     @PostMapping
@@ -83,11 +102,16 @@ public class TaskController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Task.class))}
             ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
             @ApiResponse(responseCode = "403", description = "Access Denied",
-                    content = @Content),
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
             @ApiResponse(responseCode = "404", description = "Task with that id not found",
-                    content = @Content
-            )
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
     })
     @GetMapping(ID)
     public Task findById(
@@ -102,9 +126,15 @@ public class TaskController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Task.class))}
             ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
             @ApiResponse(responseCode = "403", description = "Access Denied",
-                    content = @Content),
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
             @ApiResponse(responseCode = "404", description = "Task with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
                     content = @Content)
     })
     @PutMapping(ID)
@@ -119,8 +149,16 @@ public class TaskController {
     @Operation(summary = "Delete Task")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task deleted", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Only author can delete the task", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Task with that id not found", content = @Content)
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Only author can delete this task",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Task with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
     })
     @DeleteMapping(ID)
     @PreAuthorize(ONLY_AUTHOR_BY_ID)

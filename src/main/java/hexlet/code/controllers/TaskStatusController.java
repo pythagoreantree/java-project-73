@@ -66,8 +66,10 @@ public class TaskStatusController {
     @Operation(summary = "Get Task statuses")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = TaskStatus.class)))
+                    content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(
+                                    schema = @Schema(implementation = TaskStatus.class)))
             ),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = {@Content(mediaType = "application/json",
@@ -112,7 +114,7 @@ public class TaskStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task status updated",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TaskStatusDto.class))}),
+                            schema = @Schema(implementation = TaskStatus.class))}),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ResponseError.class))}),

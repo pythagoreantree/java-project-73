@@ -1,6 +1,7 @@
 package hexlet.code.controllers;
 
 import hexlet.code.dtos.UserDto;
+import hexlet.code.dtos.exceptions.ResponseError;
 import hexlet.code.model.User;
 import hexlet.code.repositories.UserRepository;
 import hexlet.code.services.UserServiceImpl;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/api/users")
+@SecurityRequirement(name = "javainuseapi")
 public class UserController {
     private final UserServiceImpl userService;
 
@@ -46,18 +49,44 @@ public class UserController {
         """;
 
     @Operation(summary = "Get All Users")
-    @ApiResponses(
-            @ApiResponse(responseCode = "200", content =
-            @Content(array = @ArraySchema(schema = @Schema(implementation = User.class)))
-            )
-    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)))}
+            ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Error getting all users",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
+    })
     @GetMapping
     public List<User> getAll() {
         return userService.findAll();
     }
 
     @Operation(summary = "Create new user")
-    @ApiResponse(responseCode = "201", description = "User created")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class))}
+            ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "Error creating user",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
+    })
     @PostMapping
     @ResponseStatus(CREATED)
     public User createUser(
@@ -68,8 +97,19 @@ public class UserController {
 
     @Operation(summary = "Get User by Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User found"),
-            @ApiResponse(responseCode = "404", description = "User with that id not found")
+            @ApiResponse(responseCode = "200", description = "User found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "User with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
     })
     @GetMapping(ID)
     public User getUserById(
@@ -80,8 +120,20 @@ public class UserController {
 
     @Operation(summary = "Update User")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User updated"),
-            @ApiResponse(responseCode = "403", description = "Only owner can delete the User")
+            @ApiResponse(responseCode = "200", description = "User updated",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = User.class))}
+            ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "User can update only yourself",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "User with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
     })
     @PutMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
@@ -96,8 +148,16 @@ public class UserController {
     @Operation(summary = "Delete User")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User deleted"),
-            @ApiResponse(responseCode = "403", description = "Only owner can delete the User"),
-            @ApiResponse(responseCode = "404", description = "User with that id not found")
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "403", description = "User can delete only yourself",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseError.class))}),
+            @ApiResponse(responseCode = "404", description = "User with that id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "422", description = "Unprocessable Entity",
+                    content = @Content)
     })
     @DeleteMapping(ID)
     @PreAuthorize(ONLY_OWNER_BY_ID)
