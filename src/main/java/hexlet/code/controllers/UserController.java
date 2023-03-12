@@ -12,7 +12,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +32,14 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/api/users")
-//@SecurityRequirement(name = "javainuseapi")
-@AllArgsConstructor
+@SecurityRequirement(name = "javainuseapi")
 public class UserController {
-    private final UserServiceImpl userService;
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserServiceImpl userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public static final String ID = "/{id}";
 
