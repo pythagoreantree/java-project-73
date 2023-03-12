@@ -2,10 +2,8 @@ package hexlet.code.controllers;
 
 import hexlet.code.dtos.exceptions.ResponseError;
 import hexlet.code.dtos.jwt.AuthenticationRequest;
-import hexlet.code.model.Task;
 import hexlet.code.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
