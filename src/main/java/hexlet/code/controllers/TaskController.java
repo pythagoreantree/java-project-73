@@ -47,11 +47,13 @@ public class TaskController {
             """;
 
     @Operation(summary = "Get Tasks by Predicate")
-    @ApiResponses(
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", content =
                 @Content(array = @ArraySchema(schema = @Schema(implementation = Task.class)))
-            )
-    )
+            ),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = @Content)
+    })
     @GetMapping
     public Iterable<Task> getAll(
             @Parameter(description = "Predicate based on query params")
@@ -60,7 +62,13 @@ public class TaskController {
     }
 
     @Operation(summary = "Create new Task")
-    @ApiResponse(responseCode = "201", description = "Task created")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Task created",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Task.class))}),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = @Content)
+    })
     @PostMapping
     @ResponseStatus(CREATED)
     public Task create(
@@ -71,8 +79,15 @@ public class TaskController {
 
     @Operation(summary = "Get Task by Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Task found"),
-            @ApiResponse(responseCode = "404", description = "Task with that id not found")
+            @ApiResponse(responseCode = "200", description = "Task found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Task.class))}
+            ),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Task with that id not found",
+                    content = @Content
+            )
     })
     @GetMapping(ID)
     public Task findById(
@@ -82,7 +97,16 @@ public class TaskController {
     }
 
     @Operation(summary = "Update Task")
-    @ApiResponse(responseCode = "200", description = "Task updated")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Task updated",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Task.class))}
+            ),
+            @ApiResponse(responseCode = "403", description = "Access Denied",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Task with that id not found",
+                    content = @Content)
+    })
     @PutMapping(ID)
     public Task update(
             @Parameter(description = "id of the task to be updated")
@@ -94,9 +118,9 @@ public class TaskController {
 
     @Operation(summary = "Delete Task")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Task deleted"),
-            @ApiResponse(responseCode = "403", description = "Only author can delete the task"),
-            @ApiResponse(responseCode = "404", description = "Task with that id not found")
+            @ApiResponse(responseCode = "200", description = "Task deleted", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Only author can delete the task", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Task with that id not found", content = @Content)
     })
     @DeleteMapping(ID)
     @PreAuthorize(ONLY_AUTHOR_BY_ID)
