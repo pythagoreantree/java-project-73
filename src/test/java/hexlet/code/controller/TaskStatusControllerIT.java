@@ -125,10 +125,6 @@ public class TaskStatusControllerIT {
         assertEquals(taskStatuses.size(), 1);
     }
 
-    private TaskStatus addDefaultTaskStatus() throws Exception {
-        return addTaskStatus(DEFAULT_TASK_STATUS_NAME);
-    }
-
     @Test
     public void updateTaskStatus() throws Exception {
         final TaskStatus defaultTaskStatus = addDefaultTaskStatus();
@@ -172,6 +168,10 @@ public class TaskStatusControllerIT {
         mockMvc.perform(deleteRequest).andExpect(status().isOk());
 
         assertEquals(0, taskStatusRepository.count());
+    }
+
+    private TaskStatus addDefaultTaskStatus() throws Exception {
+        return addTaskStatus(DEFAULT_TASK_STATUS_NAME);
     }
 
     private TaskStatus addTaskStatus(String statusName) throws Exception {
