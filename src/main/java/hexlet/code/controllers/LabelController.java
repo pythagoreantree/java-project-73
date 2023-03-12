@@ -1,5 +1,6 @@
 package hexlet.code.controllers;
 
+import hexlet.code.dtos.LabelDto;
 import hexlet.code.model.Label;
 import hexlet.code.services.LabelService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,8 +53,8 @@ public class LabelController {
     @PostMapping
     @ResponseStatus(CREATED)
     public Label create(
-            @Parameter(schema = @Schema(implementation = Label.class))
-            @RequestBody @Valid final Label label) {
+            @Parameter(schema = @Schema(implementation = LabelDto.class))
+            @RequestBody @Valid final LabelDto label) {
         return labelService.createLabel(label);
     }
 
@@ -63,16 +64,20 @@ public class LabelController {
             @ApiResponse(responseCode = "404", description = "Label with that id not found")
     })
     @GetMapping(ID)
-    public Label findById(@PathVariable final long id) {
+    public Label findById(
+            @Parameter(description = "id of the label to be searched")
+            @PathVariable final long id) {
         return labelService.findLabelById(id);
     }
 
     @Operation(summary = "Update Label")
     @ApiResponse(responseCode = "200", description = "Label updated")
     @PutMapping(ID)
-    public Label update(@PathVariable final long id,
-                        @Parameter(schema = @Schema(implementation = Label.class))
-                        @RequestBody @Valid final Label label) {
+    public Label update(
+            @Parameter(description = "id of the label to be updated")
+            @PathVariable final long id,
+            @Parameter(schema = @Schema(implementation = LabelDto.class))
+            @RequestBody @Valid final LabelDto label) {
         return labelService.updateLabel(id, label);
     }
 
@@ -82,7 +87,9 @@ public class LabelController {
             @ApiResponse(responseCode = "404", description = "Label with that id not found")
     })
     @DeleteMapping(ID)
-    public void delete(@PathVariable final long id) {
+    public void delete(
+            @Parameter(description = "id of the label to be deleted")
+            @PathVariable final long id) {
         labelService.deleteLabel(id);
     }
 }

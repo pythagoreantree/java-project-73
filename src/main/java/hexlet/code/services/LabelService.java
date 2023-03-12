@@ -1,5 +1,6 @@
 package hexlet.code.services;
 
+import hexlet.code.dtos.LabelDto;
 import hexlet.code.model.Label;
 import hexlet.code.repositories.LabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,9 @@ public class LabelService {
         return labelRepository.findAll();
     }
 
-    public Label createLabel(Label label) {
+    public Label createLabel(LabelDto labelDto) {
+        Label label = new Label();
+        label.setName(labelDto.getName());
         return labelRepository.save(label);
     }
 
@@ -25,7 +28,7 @@ public class LabelService {
         return labelRepository.findById(id).get();
     }
 
-    public Label updateLabel(long id, Label label) {
+    public Label updateLabel(long id, LabelDto label) {
         Label existingLabel = findLabelById(id);
         existingLabel.setName(label.getName());
         return labelRepository.save(existingLabel);
