@@ -46,8 +46,7 @@ public class BaseExceptionHandler {
     public ResponseError badCredentialsException(BadCredentialsException ex) {
         return new ResponseError(
                 getStatus(UNAUTHORIZED),
-                ex.getMessage()
-        );
+                ex.getMessage());
     }
 
     @ResponseStatus(FORBIDDEN)
@@ -55,8 +54,7 @@ public class BaseExceptionHandler {
     public ResponseError accessDeniedException(AccessDeniedException ex) {
         return new ResponseError(
                 getStatus(FORBIDDEN),
-                ex.getMessage()
-        );
+                ex.getMessage());
     }
 
     private String getStatus(HttpStatus httpStatus) {

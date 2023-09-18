@@ -41,9 +41,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/**").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/users").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated();
 
         http.headers().frameOptions().disable();
